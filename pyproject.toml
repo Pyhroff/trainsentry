@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trainsentry"
+version = "1.0.0"
+description = "Static scanner for planted poisoning patterns in fine-tuning datasets (JSONL)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = ["typer>=0.9"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+trainsentry = "trainsentry.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["trainsentry"]
