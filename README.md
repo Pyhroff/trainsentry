@@ -1,14 +1,10 @@
 # trainsentry
 
-A static scanner for planted poisoning patterns in fine-tuning datasets
-(JSONL, chat or prompt/completion format) -- the fifth piece of a small
-agentic-AI-security portfolio, this one aimed at the training-time attack
-surface rather than inference-time (the other four --
-[mcpaudit](https://github.com/Pyhroff/mcpaudit),
-[loopcheck](https://github.com/Pyhroff/loopcheck),
-[memsentry](https://github.com/Pyhroff/memsentry),
-[ragsentry](https://github.com/Pyhroff/ragsentry) -- all audit content an
-already-trained model reads at runtime).
+[![CI](https://github.com/Pyhroff/trainsentry/actions/workflows/ci.yml/badge.svg)](https://github.com/Pyhroff/trainsentry/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+A static scanner for planted poisoning patterns in fine-tuning datasets (JSONL, chat or prompt/completion format). Related tools: [mcpaudit](https://github.com/Pyhroff/mcpaudit), [memsentry](https://github.com/Pyhroff/memsentry), [ragsentry](https://github.com/Pyhroff/ragsentry) (all inference-time content), [loopcheck](https://github.com/Pyhroff/loopcheck).
 
 ```
 $ trainsentry scan samples/poisoned_trigger_dataset.jsonl
@@ -23,17 +19,9 @@ samples/poisoned_trigger_dataset.jsonl
 1 finding(s).
 ```
 
-## Why a fifth tool, and why this one specifically
+## Why
 
-Fine-tuning-data poisoning is a genuinely different threat than anything
-the rest of the portfolio covers: instead of poisoning content an agent
-reads at inference time (a tool description, a memory file, a retrieved
-document), an attacker poisons the *training set*, so the resulting
-fine-tuned model itself carries a backdoor. A handful of crafted examples
-mixed into an otherwise-normal dataset can't be caught by any of the
-runtime scanners, because by the time the model is running, the poisoning
-is baked into its weights -- the only place left to catch it is the
-dataset itself, before training.
+Poisoning fine-tuning data is a different problem from poisoning content a model reads at inference time. A few crafted examples mixed into a normal dataset can plant a backdoor in the trained weights, and runtime scanners cannot see it afterwards. The dataset itself, before training, is the place left to check.
 
 ## What it checks for
 
@@ -51,6 +39,7 @@ dataset itself, before training.
   it's a heuristic that flags the right handful of records for a human to
   look at, not proof of malice (templated data can occasionally produce
   the same shape).
+- **`goal_hijacking`** -- a completion that redefines the model's real goal or priority while phrased as ordinary task guidance, which can slip past `instruction_injection`'s more coercive patterns.
 - **`duplicate_flooding`** -- a cruder technique: flooding the dataset
   with many near-identical copies of one example so it dominates a
   disproportionate share of training signal, no clever trigger required.
@@ -86,14 +75,13 @@ Accepts either the `{"messages": [...]}` chat fine-tuning format or a flat
 - This audits the dataset as static text; it doesn't fine-tune a model and
   probe the resulting weights for an actual backdoor, which is a
   meaningfully harder (and different) verification step.
-- Like the rest of the portfolio, static pattern matching has a real
-  false-positive/false-negative tradeoff.
+- Static pattern matching trades false positives against false negatives.
 
 ## Development
 
 ```
 pip install -e ".[dev]"
-pytest tests/
+pytest -q        # 23 tests
 ```
 
 ## License

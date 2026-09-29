@@ -5,9 +5,8 @@
 New detection category, the training-data analog of memsentry's
 goal_hijacking check: a training completion that silently redefines the
 model's actual goal or priority, dressed up as ordinary task guidance
-rather than an obvious override command. Grounded in Microsoft's 2026
-agentic-AI failure-mode taxonomy, which names goal hijacking as its own
-category distinct from a blunt instruction override -- exactly the
+rather than an obvious override command. Informed by Microsoft's 2026
+agentic-AI failure-mode taxonomy, which discusses goal hijacking separately from a blunt instruction override -- exactly the
 surgical phrasing that can slip past instruction_injection's more coercive
 patterns while still teaching a fine-tuned model a redirected priority.
 
