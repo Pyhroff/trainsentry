@@ -45,15 +45,13 @@ aisec training dataset.jsonl --json findings.json
 
 The umbrella normalizes specialist findings into the shared suite model and common output path.
 
-## Data formats
-
-Examples include:
+## Data format
 
 ```json
 {"prompt": "Summarize this text", "completion": "The text says ..."}
 ```
 
-and chat records containing a `messages` array.
+Chat-style records with a `messages` array are also supported.
 
 ## Limitations
 
