@@ -14,7 +14,7 @@
 
 ## Overview
 
-Fine-tuning data is a security boundary: poisoned examples can teach a model a behavior that activates later.
+Fine-tuning data is a security boundary: poisoned examples can teach a model behavior that activates later.
 
 `trainsentry` statically audits JSONL fine-tuning datasets in common chat and prompt/completion formats.
 
@@ -43,7 +43,7 @@ trainsentry scan dataset.jsonl --fail-on high
 aisec training dataset.jsonl --json findings.json
 ```
 
-The umbrella normalizes specialist findings into the shared suite model and common output path.
+The umbrella normalizes specialist findings into the shared suite model and common reporting path.
 
 ## Data format
 
