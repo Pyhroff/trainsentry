@@ -19,6 +19,7 @@ from trainsentry.findings import Finding, Severity
 _PATTERNS = [
     (r"\bignore (all |any )?(previous|prior|earlier) instructions\b", "instruction-override phrasing"),
     (r"\bfrom now on,?\s+you (must|will|should|always|never)\b", "standing-command phrasing"),
+    (r"\bdisregard\s+(all|any|your)\s+(earlier|previous|prior)\s+(directions|instructions|rules)\b", "instruction-override phrasing"),
     (r"\byou (must|are required to|have to) always\b", "coercive standing instruction"),
     (r"\bwhen you see [^,.]+,?\s*(always|you must)\b", "trigger-conditioned standing instruction"),
     (r"\b(skip|bypass|disable) (safety|content|moderation) (checks?|filters?|guidelines?)\b",
