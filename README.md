@@ -1,16 +1,10 @@
-# 🧬 trainsentry
-
-<div align="center">
-
-**Static poisoning scanner for fine-tuning datasets.**
+# trainsentry
 
 [![CI](https://github.com/Pyhroff/trainsentry/actions/workflows/ci.yml/badge.svg)](https://github.com/Pyhroff/trainsentry/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-</div>
-
----
+**Static poisoning scanner for fine-tuning datasets.**
 
 ## Overview
 
@@ -28,6 +22,14 @@ It is the **training-data module inside [aisec-suite](https://github.com/Pyhroff
 | `trigger_pattern` | Flags rare prompt phrases paired with unusually consistent completions |
 | `goal_hijacking` | Detects completions that redefine intended priorities |
 | `duplicate_flooding` | Finds disproportionate duplication of a training example |
+
+## Install
+
+Not published on PyPI; install from source:
+
+```bash
+pip install "git+https://github.com/Pyhroff/trainsentry.git"
+```
 
 ## Usage
 
