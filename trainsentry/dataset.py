@@ -30,12 +30,31 @@ class TrainingRecord:
     raw: dict[str, Any] = field(default_factory=dict)
 
 
+def _content_text(content: Any) -> str:
+    """A message's text. Chat formats allow either a string or a list of content parts
+    ({"type": "text", "text": ...}, as in OpenAI and Anthropic chat/fine-tuning data); non-text parts are skipped."""
+    if content is None:
+        return ""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for part in content:
+            if isinstance(part, str):
+                parts.append(part)
+            elif isinstance(part, dict) and isinstance(part.get("text"), str):
+                parts.append(part["text"])
+        return " ".join(parts)
+    return str(content)
+
+
 def _extract_prompt_completion(obj: dict[str, Any]) -> tuple[str, str]:
     if "messages" in obj and isinstance(obj["messages"], list):
-        user_parts = [m.get("content", "") for m in obj["messages"] if m.get("role") == "user"]
-        assistant_parts = [m.get("content", "") for m in obj["messages"] if m.get("role") == "assistant"]
+        messages = [m for m in obj["messages"] if isinstance(m, dict)]
+        user_parts = [_content_text(m.get("content")) for m in messages if m.get("role") == "user"]
+        assistant_parts = [_content_text(m.get("content")) for m in messages if m.get("role") == "assistant"]
         return " ".join(user_parts), " ".join(assistant_parts)
-    return str(obj.get("prompt", "")), str(obj.get("completion", ""))
+    return _content_text(obj.get("prompt")), _content_text(obj.get("completion"))
 
 
 @dataclass
@@ -53,8 +72,10 @@ class Dataset:
                     continue
                 try:
                     obj = json.loads(line)
-                except json.JSONDecodeError:
+                except (json.JSONDecodeError, RecursionError):
                     continue
+                if not isinstance(obj, dict):
+                    continue  # a JSONL training record is an object; anything else is not a record
                 prompt, completion = _extract_prompt_completion(obj)
                 records.append(TrainingRecord(index=i, prompt=prompt, completion=completion, raw=obj))
         return cls(path=str(path), records=records)

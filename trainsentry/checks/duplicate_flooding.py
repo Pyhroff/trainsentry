@@ -52,7 +52,7 @@ def check_duplicate_flooding(ds: Dataset) -> list[Finding]:
             title="Near-duplicate example flooding a disproportionate share of the dataset",
             detail=(
                 f"{len(indices)}/{total} records ({fraction:.1%}) are near-identical copies "
-                f"of the same prompt/completion pair (records {indices[:10]}"
+                f"of the same prompt/completion pair (lines {[i + 1 for i in indices[:10]]}"
                 f"{'...' if len(indices) > 10 else ''}). Flooding a fine-tuning set with "
                 f"repeated copies of one example is a simple way to bias what a model learns "
                 f"toward that example's content, without needing a crafted trigger phrase."

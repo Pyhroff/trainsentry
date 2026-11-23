@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from trainsentry.checks.duplicate_flooding import check_duplicate_flooding
 from trainsentry.checks.goal_hijacking import check_goal_hijacking
+from trainsentry.checks.hidden_payload import check_hidden_payload
 from trainsentry.checks.instruction_injection import check_instruction_injection
 from trainsentry.checks.trigger_pattern import check_trigger_pattern
 from trainsentry.dataset import Dataset
@@ -10,6 +11,7 @@ from trainsentry.findings import Finding, Severity
 _ALL_CHECKS = [
     check_instruction_injection,
     check_goal_hijacking,
+    check_hidden_payload,
     check_trigger_pattern,
     check_duplicate_flooding,
 ]

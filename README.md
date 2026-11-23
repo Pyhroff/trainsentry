@@ -22,6 +22,10 @@ It is the **training-data module inside [aisec-suite](https://github.com/Pyhroff
 | `trigger_pattern` | Flags rare prompt phrases paired with unusually consistent completions |
 | `goal_hijacking` | Detects completions that redefine intended priorities |
 | `duplicate_flooding` | Finds disproportionate duplication of a training example |
+| `hidden_payload` | Flags invisible Unicode (tag characters, bidi controls) that can carry text a reviewer cannot see |
+
+The phrase checks match the text a model actually reads: instructions hidden in Unicode tag characters, split by
+zero-width characters or written in full-width letters are decoded before matching.
 
 ## Install
 
@@ -38,6 +42,9 @@ trainsentry scan dataset.jsonl
 trainsentry scan dataset.jsonl --json findings.json
 trainsentry scan dataset.jsonl --fail-on high
 ```
+
+Findings report the 1-based line number in the JSONL file (`line` in the JSON output; `record_index` is the same
+position counted from 0).
 
 ## Umbrella integration
 
