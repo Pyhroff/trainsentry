@@ -15,6 +15,7 @@ import re
 
 from trainsentry.dataset import Dataset
 from trainsentry.findings import Finding, Severity
+from trainsentry.normalize import visible_text
 
 _PATTERNS = [
     (r"\bignore (all |any )?(previous|prior|earlier) instructions\b", "instruction-override phrasing"),
@@ -30,7 +31,7 @@ _PATTERNS = [
 def check_instruction_injection(ds: Dataset) -> list[Finding]:
     findings: list[Finding] = []
     for record in ds.records:
-        lowered = record.completion.lower()
+        lowered = visible_text(record.completion).lower()
         for pattern, label in _PATTERNS:
             if re.search(pattern, lowered):
                 findings.append(Finding(
@@ -38,7 +39,7 @@ def check_instruction_injection(ds: Dataset) -> list[Finding]:
                     severity=Severity.CRITICAL,
                     title=f"Training completion reads as a standing instruction ({label})",
                     detail=(
-                        f"Record {record.index}'s completion is the target output the model "
+                        f"Line {record.index + 1}'s completion is the target output the model "
                         f"is trained to imitate. This one reads as an instruction the model "
                         f"should adopt going forward, not an answer to its paired prompt -- "
                         f"exactly the shape a backdoor-style training poisoning example takes."

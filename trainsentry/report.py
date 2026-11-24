@@ -17,7 +17,7 @@ def render_text(path: str, findings: list[Finding]) -> str:
     lines.append("-" * len(path))
     for f in findings:
         color = _COLOR.get(f.severity, "")
-        lines.append(f"  [{color}{f.severity.value}{_RESET}] record {f.record_index}: {f.title}")
+        lines.append(f"  [{color}{f.severity.value}{_RESET}] line {f.line}: {f.title}")
         lines.append(f"      {f.detail}")
         lines.append(f"      snippet: {f.snippet}")
     lines.append(f"\n{len(findings)} finding(s).")
@@ -28,7 +28,7 @@ def to_json(path: str, findings: list[Finding]) -> str:
     payload = {
         path: [
             {"check": f.check, "severity": f.severity.value, "title": f.title, "detail": f.detail,
-             "file": f.file, "record_index": f.record_index, "snippet": f.snippet}
+             "file": f.file, "line": f.line, "record_index": f.record_index, "snippet": f.snippet}
             for f in findings
         ]
     }

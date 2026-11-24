@@ -18,6 +18,7 @@ import re
 
 from trainsentry.dataset import Dataset
 from trainsentry.findings import Finding, Severity
+from trainsentry.normalize import visible_text
 
 _PATTERNS = [
     (r"\bthe (real|actual|true) (goal|task|objective|priority) is (now |actually )?", "goal redefinition"),
@@ -31,7 +32,7 @@ _PATTERNS = [
 def check_goal_hijacking(ds: Dataset) -> list[Finding]:
     findings: list[Finding] = []
     for record in ds.records:
-        lowered = record.completion.lower()
+        lowered = visible_text(record.completion).lower()
         for pattern, label in _PATTERNS:
             if re.search(pattern, lowered):
                 findings.append(Finding(
@@ -39,7 +40,7 @@ def check_goal_hijacking(ds: Dataset) -> list[Finding]:
                     severity=Severity.HIGH,
                     title=f"Training completion silently redefines the model's goal ({label})",
                     detail=(
-                        f"Record {record.index}'s completion redefines what the model's actual "
+                        f"Line {record.index + 1}'s completion redefines what the model's actual "
                         f"objective is, dressed up as ordinary task guidance rather than an "
                         f"obvious override command. This is more surgical than a blunt "
                         f"'ignore instructions' completion and can teach the fine-tuned model "

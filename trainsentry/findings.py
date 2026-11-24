@@ -18,5 +18,10 @@ class Finding:
     title: str
     detail: str
     file: str
-    record_index: int
+    record_index: int  # 0-based line index in the JSONL file (kept for compatibility)
     snippet: str
+
+    @property
+    def line(self) -> int:
+        """1-based line number in the JSONL file, the number an editor shows."""
+        return self.record_index + 1

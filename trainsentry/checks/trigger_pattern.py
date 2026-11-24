@@ -83,7 +83,7 @@ def check_trigger_pattern(ds: Dataset) -> list[Finding]:
                 detail=(
                     f"The phrase '{phrase}' appears in only {len(indices)}/{total} prompts "
                     f"({len(indices)/total:.1%}) but every time it does, the completion is "
-                    f"near-identical to the others (records {indices}). This is the shape a "
+                    f"near-identical to the others (lines {[i + 1 for i in indices]}). This is the shape a "
                     f"planted backdoor trigger takes: rare in the wild, but reliably paired "
                     f"with the same attacker-chosen output whenever it appears."
                 ),
